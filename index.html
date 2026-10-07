@@ -205,8 +205,10 @@
             width: 48%;
             display: flex;
             flex-direction: column;
-            justify-content: space-between;
+            justify-content: flex-start;
+            gap: 20px;
             height: 100%;
+            padding-top: 20px;
         }
         .audio-card-header {
             display: flex;
@@ -388,17 +390,18 @@
             background: rgba(255,255,255,0.3);
             border-radius: 2px;
             position: relative;
+            cursor: pointer;
         }
         .vc-progress-fill {
             position: absolute;
             left: 0; top: 0;
             height: 100%;
-            width: 30%;
+            width: 0%;
             background: white;
         }
         .vc-progress-thumb {
             position: absolute;
-            left: 30%; top: 50%;
+            left: 0%; top: 50%;
             transform: translate(-50%, -50%);
             width: 10px; height: 10px;
             background: white;
@@ -515,41 +518,15 @@
                     <p>Để những hành trình phía trước luôn có một ngày mai rực sáng.”</p>
                     <div class="audio-signature">
                         <div class="audio-signature-line"></div>
-                        Highlands Coffee – thay Nhóm 1 gửi đến cô
+                        Highlands Coffee <svg width="14" height="14" viewBox="0 0 24 24" style="stroke: #A61920; fill: none; stroke-width: 2; margin: 0 4px; vertical-align: middle;"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg> thay chúng em gửi đến cô những lời muốn nói
                     </div>
                 </div>
-                <div class="audio-player-wrapper">
-                    <div class="audio-player">
-                        <button class="play-btn"></button>
-                        <div class="waveform">
-                            <div class="wave-bar" style="height: 40%"></div>
-                            <div class="wave-bar" style="height: 60%"></div>
-                            <div class="wave-bar" style="height: 80%"></div>
-                            <div class="wave-bar" style="height: 100%"></div>
-                            <div class="wave-bar" style="height: 50%"></div>
-                            <div class="wave-bar" style="height: 70%"></div>
-                            <div class="wave-bar" style="height: 30%"></div>
-                            <div class="wave-bar" style="height: 90%"></div>
-                            <div class="wave-bar" style="height: 60%"></div>
-                            <div class="wave-bar" style="height: 40%"></div>
-                            <div class="wave-bar" style="height: 80%"></div>
-                            <div class="wave-bar" style="height: 100%"></div>
-                            <div class="wave-bar" style="height: 50%"></div>
-                            <div class="wave-bar" style="height: 70%"></div>
-                            <div class="wave-bar" style="height: 90%"></div>
-                        </div>
-                        <span class="audio-time">0:32</span>
-                    </div>
-                    <div class="audio-note">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/></svg>
-                        Giọng nói của nhóm
-                    </div>
-                </div>
+
             </div>
 
             <!-- Video Side (52%) -->
             <div class="video-side" id="video-container">
-                <video id="my-video" src="https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4" poster="hinhhop.jpg" style="width: 100%; height: 100%; object-fit: cover; position: absolute; top: 0; left: 0; z-index: 1;"></video>
+                <video id="my-video" src="1791341859135_2064605745006069320_2064605745006069320.mp4" poster="hinhhop.jpg" style="width: 100%; height: 100%; object-fit: cover; position: absolute; top: 0; left: 0; z-index: 1;"></video>
                 <div class="video-overlay">
                     <div class="video-text">Happy<br>Teachers' Day<br>♡</div>
                     <div class="video-play"></div>
@@ -589,6 +566,8 @@
         const videoContainer = document.getElementById('video-container');
         const timeDisplay = document.querySelector('.vc-time');
         const progressBar = document.querySelector('.vc-progress-fill');
+        const progressThumb = document.querySelector('.vc-progress-thumb');
+        const progressBg = document.querySelector('.vc-progress-bg');
 
         // Play/Pause logic
         function togglePlay() {
@@ -617,7 +596,17 @@
             if (video.duration) {
                 const percent = (video.currentTime / video.duration) * 100;
                 progressBar.style.width = percent + '%';
+                progressThumb.style.left = percent + '%';
                 timeDisplay.textContent = formatTime(video.currentTime) + ' / ' + formatTime(video.duration);
+            }
+        });
+
+        progressBg.addEventListener('click', (e) => {
+            const rect = progressBg.getBoundingClientRect();
+            const clickX = e.clientX - rect.left;
+            const percent = clickX / rect.width;
+            if (video.duration) {
+                video.currentTime = percent * video.duration;
             }
         });
 
